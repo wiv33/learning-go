@@ -9,6 +9,15 @@ import (
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	dump, err := httputil.DumpRequest(r, true)
+
+	w.Header().Add("Set-Cookie", "VISIT=TRUE")
+
+	if _, ok := r.Header["Cookie"]; ok {
+		fmt.Fprintf(w, "<html><body>%s</body></html>", "두 번째 이후")
+	} else {
+		fmt.Fprintln(w, "<html><body>첫 번째</body></html>")
+	}
+
 	if err != nil {
 		http.Error(w, fmt.Sprint(err), http.StatusInternalServerError)
 		return
